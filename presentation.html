@@ -66,7 +66,7 @@ p{color:var(--ink-2);font-size:15px;line-height:1.55}
 .card.problem .icon{font-size:26px;margin-bottom:12px}
 .card.problem h3{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:12px}
 
-.card.solution{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card.solution{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative}
 .card.solution::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gold)}
 .card.solution .lbl{font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
 .card.solution h3{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--ink);margin-bottom:16px}
@@ -90,14 +90,21 @@ td.metric{font-weight:700;color:var(--ink);font-size:14px}
 td.after{color:var(--green);font-weight:700}
 .impact-foot{margin-top:26px;text-align:center;font-family:'Playfair Display',serif;font-size:19px;font-style:italic;font-weight:700;color:var(--gold)}
 
-/* ── Screenshot placeholders ────────────────────────────── */
-.shot{background:#f8fafc;border:2px dashed #cbd5e1;border-radius:12px;height:250px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;font-style:italic;font-weight:600}
-.shot-cap{text-align:center;font-size:12px;color:var(--ink-3);margin-top:12px;line-height:1.4}
+/* ── Screenshot holders ─────────────────────────────────── */
+.shot-img{
+  width:100%;
+  height:250px;
+  object-fit:cover;
+  object-position:top;
+  border-radius:12px;
+  border:1px solid #e2e8f0;
+  box-shadow:0 10px 30px rgba(15,42,74,.10);
+  background:#f8fafc;
+}
+.shot-cap{text-align:center;font-size:12px;color:var(--ink-3);margin-top:12px;line-height:1.4;font-weight:600}
 
 /* ── Roadmap timeline ───────────────────────────────────── */
-.timeline-bar{height:2px;background:var(--gold);margin:22px 40px 0;position:relative}
-.dot{width:14px;height:14px;background:var(--gold);border-radius:50%;position:absolute;top:-6px}
-.phase{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:24px}
+.phase{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:8px}
 .phase .q{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--gold);margin-bottom:6px}
 .phase h4{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--ink);margin-bottom:14px}
 .phase ul{list-style:none}
@@ -110,14 +117,14 @@ td.after{color:var(--green);font-weight:700}
 .credit-box::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--gold);border-radius:14px 0 0 14px}
 .credit-box .lbl{font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
 .credit-box strong{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;display:block}
-.ask-box{background:var(--navy-2);border-radius:14px;padding:26px 30px;position:relative;margin-top:22px}
+.ask-box{background:var(--navy-2);border-radius:14px;padding:22px 30px;position:relative;margin-top:22px}
 .ask-box::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--gold);border-radius:14px 0 0 14px}
 .ask-box ul{list-style:none}
-.ask-box li{font-size:14.5px;color:#e2e8f0;line-height:1.7;padding-left:26px;position:relative}
-.ask-box li::before{content:'✓';color:var(--gold);position:absolute;left:0;font-weight:800;font-size:15px}
+.ask-box li{font-size:14px;color:#e2e8f0;line-height:1.6;padding-left:26px;position:relative;margin-bottom:4px}
+.ask-box li::before{content:'✓';color:var(--gold);position:absolute;left:0;font-weight:800;font-size:14px}
 
-.thanks{margin-top:24px;text-align:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:var(--gold)}
-.contact{margin-top:10px;text-align:center;font-size:12px;color:#cbdaf2}
+.thanks{margin-top:22px;text-align:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:var(--gold)}
+.contact{margin-top:8px;text-align:center;font-size:12px;color:#cbdaf2}
 
 /* ── Chrome (progress, counter, hint) ───────────────────── */
 .progress{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.08);z-index:50}
@@ -151,7 +158,7 @@ td.after{color:var(--green);font-weight:700}
   <div class="credit-row">
     <div class="credit-box">
       <div class="lbl">Built &amp; Executed by</div>
-      <strong>[ Your Name ]</strong>
+      <strong>Saprem Nikhar</strong>
     </div>
     <div class="credit-box">
       <div class="lbl">Strategic Inputs by</div>
@@ -224,12 +231,12 @@ td.after{color:var(--green);font-weight:700}
   <div class="gold-bar"></div>
   <div class="grid-2" style="margin-top:6px">
     <div>
-      <div class="shot">[ Insert dashboard screenshot — top section ]</div>
-      <div class="shot-cap">Consolidated view — FTE, shrinkage, target, achieved, achievement % — all live.</div>
+      <img src="shot1.png" alt="Executive Dashboard" class="shot-img">
+      <div class="shot-cap">Executive Dashboard — FTE, shrinkage, target, achieved, achievement % — all live.</div>
     </div>
     <div>
-      <div class="shot">[ Insert dashboard screenshot — Team Lead chart ]</div>
-      <div class="shot-cap">Team Lead scorecard — shrinkage visible daily, per lead.</div>
+      <img src="shot2.png" alt="Manager Dashboard" class="shot-img">
+      <div class="shot-cap">Manager view — hourly production, target vs achieved, live shrinkage tracking.</div>
     </div>
   </div>
 </section>
@@ -279,9 +286,9 @@ td.after{color:var(--green);font-weight:700}
       <div class="cb">
         <h3>Modern web platform</h3>
         <ul style="list-style:none">
-          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Responsive — desktop, tablet, mobile</li>
-          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Role-based views per user type</li>
-          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative">▪ Live interface, personalised greeting</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;margin-bottom:8px">▪ Responsive — desktop, tablet, mobile</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;margin-bottom:8px">▪ Role-based views per user type</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6">▪ Live interface, personalised greeting</li>
         </ul>
       </div>
     </div>
@@ -290,9 +297,9 @@ td.after{color:var(--green);font-weight:700}
       <div class="cb">
         <h3>Supabase · PostgreSQL</h3>
         <ul style="list-style:none">
-          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Row-Level Security — strict isolation</li>
-          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Full audit trail on every entry</li>
-          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative">▪ Employees see only their own data</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;margin-bottom:8px">▪ Row-Level Security — strict isolation</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;margin-bottom:8px">▪ Full audit trail on every entry</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6">▪ Employees see only their own data</li>
         </ul>
       </div>
     </div>
@@ -301,9 +308,9 @@ td.after{color:var(--green);font-weight:700}
       <div class="cb">
         <h3>GitHub Pages · Cloud-native</h3>
         <ul style="list-style:none">
-          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Zero server maintenance</li>
-          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Accessible anywhere with internet</li>
-          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative">▪ Effectively zero monthly cost</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;margin-bottom:8px">▪ Zero server maintenance</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;margin-bottom:8px">▪ Accessible anywhere with internet</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6">▪ Effectively zero monthly cost</li>
         </ul>
       </div>
     </div>
@@ -354,7 +361,7 @@ td.after{color:var(--green);font-weight:700}
   <div class="credit-row">
     <div class="credit-box">
       <div class="lbl">Built &amp; Executed by</div>
-      <strong>[ Your Name ]</strong>
+      <strong>Saprem Nikhar</strong>
     </div>
     <div class="credit-box">
       <div class="lbl">Strategic Inputs &amp; Validation by</div>
@@ -369,7 +376,7 @@ td.after{color:var(--green);font-weight:700}
     </ul>
   </div>
   <div class="thanks">Thank You — Questions?</div>
-  <div class="contact">[ Your Name ] &nbsp;·&nbsp; [ Your Email ] &nbsp;·&nbsp; [ Your Role ]</div>
+  <div class="contact">Saprem Nikhar &nbsp;·&nbsp; saprem.nikhar@aminfoweb.co.in &nbsp;·&nbsp; Team Lead – RCM Operations</div>
 </section>
 
 </div>
@@ -406,15 +413,12 @@ td.after{color:var(--green);font-weight:700}
     }
   });
 
-  // Click left / right half to navigate
   document.getElementById('stage').addEventListener('click', e => {
-    if (e.target.closest('.slide') === null) return;
     const rect = document.documentElement.getBoundingClientRect();
     if (e.clientX - rect.left > rect.width / 2) show(idx + 1);
     else show(idx - 1);
   });
 
-  // Deep-link from URL hash
   const start = parseInt((location.hash || '').replace('#',''), 10);
   if (start && start >= 1 && start <= total) idx = start - 1;
   show(idx);
