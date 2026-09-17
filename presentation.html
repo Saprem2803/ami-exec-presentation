@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMI · Executive Operations Visibility Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1628; --navy-2:#152a4a; --gold:#c9a227; --gold-soft:#f5e6b8;
+  --ink:#1e293b; --ink-2:#475569; --ink-3:#64748b; --muted:#94a3b8;
+  --line:#e2e8f0; --white:#fff;
+  --green:#0d7a4a; --amber:#b45309; --red:#b91c1c;
+  --red-soft:#fee2e2; --amber-soft:#fef3c7; --green-soft:#e6f4ec;
+  --blue-soft:#f1f7ff; --gold-soft-bg:#fdfcf7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:#05080f;color:var(--ink);-webkit-font-smoothing:antialiased}
+
+/* ── Stage & slides ─────────────────────────────────────── */
+.stage{position:fixed;inset:0;background:#05080f}
+.slide{
+  position:absolute;top:50%;left:50%;
+  width:1280px;height:720px;
+  background:#fff;color:var(--ink);
+  padding:60px 80px;
+  display:none;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.55);
+  transform:translate(-50%,-50%) scale(var(--scale,1));
+  transform-origin:center center;
+}
+.slide.active{display:block}
+.slide.dark{background:var(--navy);color:#fff}
+.slide.dark h1,.slide.dark h2,.slide.dark h3{color:#fff}
+
+/* ── Typography ─────────────────────────────────────────── */
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:2.2px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.title{font-family:'Playfair Display',Georgia,serif;font-size:34px;font-weight:800;color:var(--ink);letter-spacing:-.5px;line-height:1.1;margin-bottom:6px}
+.display{font-family:'Playfair Display',Georgia,serif;font-size:56px;font-weight:800;color:#fff;letter-spacing:-1.4px;line-height:1.05;margin:22px 0 22px}
+.gold-bar{width:70px;height:3px;background:var(--gold);margin:14px 0 30px}
+.gold-bar-lg{width:140px;height:4px;background:var(--gold);margin:0 0 26px}
+.lead{font-size:17px;color:rgba(226,232,240,.85);line-height:1.5;max-width:760px}
+p{color:var(--ink-2);font-size:15px;line-height:1.55}
+
+/* ── Layout grids ───────────────────────────────────────── */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:14px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;margin-top:14px}
+.grid-3-tight{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px}
+
+/* ── Cards ──────────────────────────────────────────────── */
+.card{background:#fbfcfe;border:1px solid var(--line);border-radius:14px;padding:26px;position:relative}
+.card.accent{background:var(--blue-soft);border-color:#d8e7fb}
+.card.gold-tint{background:var(--gold-soft-bg);border-color:#f0e6c0}
+.card.navy-head{background:#fbfcfe;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card.navy-head .ch{background:var(--navy);padding:14px 26px}
+.card.navy-head .ch .lbl{font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold)}
+.card.navy-head .cb{padding:22px 26px}
+.card.navy-head h3{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--ink);margin-bottom:14px}
+
+.card.problem::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;border-radius:14px 0 0 14px}
+.card.problem.red::before{background:var(--red)}
+.card.problem.amber::before{background:var(--amber)}
+.card.problem .icon{font-size:26px;margin-bottom:12px}
+.card.problem h3{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:12px}
+
+.card.solution{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card.solution::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--gold)}
+.card.solution .lbl{font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.card.solution h3{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--ink);margin-bottom:16px}
+.card.solution ul{list-style:none}
+.card.solution li{font-size:14px;color:var(--ink-2);line-height:1.5;padding-left:18px;position:relative;margin-bottom:10px}
+.card.solution li::before{content:'▪';color:var(--gold);font-weight:800;position:absolute;left:0}
+
+/* ── Differentiator tiles ───────────────────────────────── */
+.tile{background:#fbfcfe;border:1px solid var(--line);border-radius:12px;padding:18px 22px;position:relative}
+.tile::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--gold);border-radius:12px 0 0 12px}
+.tile .num{font-family:'Playfair Display',serif;font-size:20px;font-weight:800;color:var(--gold);margin-bottom:6px}
+.tile h4{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.tile p{font-size:12.5px;color:var(--ink-2);line-height:1.45}
+
+/* ── Impact table ───────────────────────────────────────── */
+table{width:100%;border-collapse:collapse;margin-top:12px;border-radius:12px;overflow:hidden}
+th{background:var(--navy);color:var(--gold-soft);padding:14px 20px;text-align:left;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;font-weight:800}
+td{padding:16px 20px;border-bottom:1px solid var(--line);font-size:14px;color:var(--ink-2)}
+tr:nth-child(even) td{background:#fbfcfe}
+td.metric{font-weight:700;color:var(--ink);font-size:14px}
+td.after{color:var(--green);font-weight:700}
+.impact-foot{margin-top:26px;text-align:center;font-family:'Playfair Display',serif;font-size:19px;font-style:italic;font-weight:700;color:var(--gold)}
+
+/* ── Screenshot placeholders ────────────────────────────── */
+.shot{background:#f8fafc;border:2px dashed #cbd5e1;border-radius:12px;height:250px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;font-style:italic;font-weight:600}
+.shot-cap{text-align:center;font-size:12px;color:var(--ink-3);margin-top:12px;line-height:1.4}
+
+/* ── Roadmap timeline ───────────────────────────────────── */
+.timeline-bar{height:2px;background:var(--gold);margin:22px 40px 0;position:relative}
+.dot{width:14px;height:14px;background:var(--gold);border-radius:50%;position:absolute;top:-6px}
+.phase{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin-top:24px}
+.phase .q{font-family:'Playfair Display',serif;font-size:24px;font-weight:800;color:var(--gold);margin-bottom:6px}
+.phase h4{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--ink);margin-bottom:14px}
+.phase ul{list-style:none}
+.phase li{font-size:13px;color:var(--ink-2);line-height:1.5;padding-left:16px;position:relative;margin-bottom:8px}
+.phase li::before{content:'▪';color:var(--gold);position:absolute;left:0;font-weight:800}
+
+/* ── Finale slide ───────────────────────────────────────── */
+.credit-row{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:26px}
+.credit-box{background:var(--navy-2);border-radius:14px;padding:26px 30px;position:relative}
+.credit-box::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--gold);border-radius:14px 0 0 14px}
+.credit-box .lbl{font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.credit-box strong{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;display:block}
+.ask-box{background:var(--navy-2);border-radius:14px;padding:26px 30px;position:relative;margin-top:22px}
+.ask-box::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--gold);border-radius:14px 0 0 14px}
+.ask-box ul{list-style:none}
+.ask-box li{font-size:14.5px;color:#e2e8f0;line-height:1.7;padding-left:26px;position:relative}
+.ask-box li::before{content:'✓';color:var(--gold);position:absolute;left:0;font-weight:800;font-size:15px}
+
+.thanks{margin-top:24px;text-align:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:var(--gold)}
+.contact{margin-top:10px;text-align:center;font-size:12px;color:#cbdaf2}
+
+/* ── Chrome (progress, counter, hint) ───────────────────── */
+.progress{position:fixed;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.08);z-index:50}
+.progress .fill{height:100%;background:var(--gold);width:11%;transition:width .3s ease}
+.counter{position:fixed;bottom:20px;right:24px;color:rgba(255,255,255,.45);font-size:12px;font-weight:700;letter-spacing:1px;z-index:50;font-variant-numeric:tabular-nums}
+.hint{position:fixed;bottom:20px;left:24px;color:rgba(255,255,255,.35);font-size:11px;letter-spacing:.5px;z-index:50}
+.hint kbd{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:4px;padding:1px 6px;font-family:inherit;font-size:10px;color:rgba(255,255,255,.7)}
+
+@media print{
+  html,body{overflow:visible;height:auto}
+  .stage{position:static;background:#fff}
+  .progress,.counter,.hint{display:none !important}
+  .slide{position:relative;top:auto;left:auto;transform:none;display:block !important;page-break-after:always;box-shadow:none;margin:0 auto;width:100%;max-width:1280px}
+}
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="fill" id="progressFill"></div></div>
+<div class="hint"><kbd>←</kbd> <kbd>→</kbd> navigate · <kbd>F</kbd> fullscreen · <kbd>Ctrl+P</kbd> save as PDF</div>
+<div class="counter"><span id="counter">1 / 9</span></div>
+
+<div class="stage" id="stage">
+
+<!-- ═══════════ SLIDE 1 — TITLE ═══════════ -->
+<section class="slide dark active">
+  <div class="eyebrow">Revenue Cycle Management</div>
+  <h1 class="display">Executive Operations<br>Visibility Platform</h1>
+  <div class="gold-bar-lg"></div>
+  <p class="lead">Real-time production, shrinkage &amp; performance across RCM operations</p>
+  <div class="credit-row">
+    <div class="credit-box">
+      <div class="lbl">Built &amp; Executed by</div>
+      <strong>[ Your Name ]</strong>
+    </div>
+    <div class="credit-box">
+      <div class="lbl">Strategic Inputs by</div>
+      <strong>Andy</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 2 — PROBLEM ═══════════ -->
+<section class="slide">
+  <div class="eyebrow">The Problem</div>
+  <h2 class="title">The visibility gap we had before</h2>
+  <div class="gold-bar"></div>
+  <div class="grid-3">
+    <div class="card problem red">
+      <div class="icon">🔴</div>
+      <h3>Fragmented hourly data</h3>
+      <p>Production logged across dozens of Excel sheets — no single source of truth for who produced what, when.</p>
+    </div>
+    <div class="card problem amber">
+      <div class="icon">🟡</div>
+      <h3>Manual, delayed reporting</h3>
+      <p>2–3 hours a day spent compiling numbers that were already stale by the time they reached leadership.</p>
+    </div>
+    <div class="card problem red">
+      <div class="icon">🔴</div>
+      <h3>Blind decisions during shift</h3>
+      <p>No hourly visibility. Shrinkage only surfaced at month-end — the opportunity to intervene was already gone.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 3 — SOLUTION ═══════════ -->
+<section class="slide">
+  <div class="eyebrow">The Solution</div>
+  <h2 class="title">One connected platform — floor to boardroom</h2>
+  <div class="gold-bar"></div>
+  <div class="grid-2">
+    <div class="card solution">
+      <div style="padding:26px">
+        <div class="lbl">Employee Portal</div>
+        <h3>Hourly Entry Portal</h3>
+        <ul>
+          <li>Hour-by-hour production capture</li>
+          <li>Live target vs achieved feedback</li>
+          <li>Attendance &amp; half-day integrated</li>
+          <li>Smart locking — future hours blocked, past hours editable in grace window</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card solution">
+      <div style="padding:26px">
+        <div class="lbl">Leadership View</div>
+        <h3>Executive Dashboard</h3>
+        <ul>
+          <li>Live consolidation across projects, sub-projects &amp; team leads</li>
+          <li>Achievement %, shrinkage %, FTE utilisation</li>
+          <li>Interactive charts with drill-down</li>
+          <li>One-click executive report export</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 4 — WALKTHROUGH ═══════════ -->
+<section class="slide">
+  <div class="eyebrow">Live Walkthrough</div>
+  <h2 class="title">What leadership sees — in real time</h2>
+  <div class="gold-bar"></div>
+  <div class="grid-2" style="margin-top:6px">
+    <div>
+      <div class="shot">[ Insert dashboard screenshot — top section ]</div>
+      <div class="shot-cap">Consolidated view — FTE, shrinkage, target, achieved, achievement % — all live.</div>
+    </div>
+    <div>
+      <div class="shot">[ Insert dashboard screenshot — Team Lead chart ]</div>
+      <div class="shot-cap">Team Lead scorecard — shrinkage visible daily, per lead.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 5 — DIFFERENTIATION ═══════════ -->
+<section class="slide">
+  <div class="eyebrow">Differentiation</div>
+  <h2 class="title">Six capabilities that didn't exist before</h2>
+  <div class="gold-bar"></div>
+  <div class="grid-3-tight">
+    <div class="tile"><div class="num">01</div><h4>Real-time sync</h4><p>Entries flow to the dashboard in seconds — not hours.</p></div>
+    <div class="tile"><div class="num">02</div><h4>Smart target adjustment</h4><p>Daily targets recalculate based on present FTE.</p></div>
+    <div class="tile"><div class="num">03</div><h4>Shrinkage at every level</h4><p>Employee → sub-project → project → team lead.</p></div>
+    <div class="tile"><div class="num">04</div><h4>Team Lead accountability</h4><p>Live scorecard ranked against peers, updated daily.</p></div>
+    <div class="tile"><div class="num">05</div><h4>Data integrity by design</h4><p>Grace windows, locked future hours, full audit trail.</p></div>
+    <div class="tile"><div class="num">06</div><h4>Zero infrastructure cost</h4><p>Cloud-native architecture, no servers to maintain.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 6 — IMPACT ═══════════ -->
+<section class="slide">
+  <div class="eyebrow">Business Impact</div>
+  <h2 class="title">Measured outcomes</h2>
+  <div class="gold-bar"></div>
+  <table>
+    <thead>
+      <tr><th style="width:30%">Metric</th><th style="width:32%">Before</th><th>After</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="metric">Reporting time</td><td>2–3 hrs/day manual</td><td class="after">Automated — zero</td></tr>
+      <tr><td class="metric">Decision latency</td><td>Next morning</td><td class="after">Real-time, mid-shift</td></tr>
+      <tr><td class="metric">Shrinkage visibility</td><td>Month-end only</td><td class="after">Daily, per lead</td></tr>
+      <tr><td class="metric">Data accuracy</td><td>Copy-paste errors</td><td class="after">Enforced at source</td></tr>
+    </tbody>
+  </table>
+  <div class="impact-foot">Same data. The right speed. The right people.</div>
+</section>
+
+<!-- ═══════════ SLIDE 7 — ARCHITECTURE ═══════════ -->
+<section class="slide">
+  <div class="eyebrow">Architecture &amp; Security</div>
+  <h2 class="title">Enterprise-grade foundation, minimal footprint</h2>
+  <div class="gold-bar"></div>
+  <div class="grid-3-tight">
+    <div class="card navy-head">
+      <div class="ch"><div class="lbl">Frontend</div></div>
+      <div class="cb">
+        <h3>Modern web platform</h3>
+        <ul style="list-style:none">
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Responsive — desktop, tablet, mobile</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Role-based views per user type</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative">▪ Live interface, personalised greeting</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card navy-head">
+      <div class="ch"><div class="lbl">Data Platform</div></div>
+      <div class="cb">
+        <h3>Supabase · PostgreSQL</h3>
+        <ul style="list-style:none">
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Row-Level Security — strict isolation</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Full audit trail on every entry</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative">▪ Employees see only their own data</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card navy-head">
+      <div class="ch"><div class="lbl">Hosting</div></div>
+      <div class="cb">
+        <h3>GitHub Pages · Cloud-native</h3>
+        <ul style="list-style:none">
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Zero server maintenance</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative;margin-bottom:8px">▪ Accessible anywhere with internet</li>
+          <li style="font-size:13px;color:var(--ink-2);line-height:1.6;padding-left:14px;position:relative">▪ Effectively zero monthly cost</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 8 — ROADMAP ═══════════ -->
+<section class="slide">
+  <div class="eyebrow">Roadmap</div>
+  <h2 class="title">What's next</h2>
+  <div class="gold-bar"></div>
+  <div class="grid-3-tight" style="margin-top:8px">
+    <div class="phase">
+      <div class="q">Q1</div>
+      <h4>Adoption</h4>
+      <ul>
+        <li>Rollout across all projects</li>
+        <li>Structured feedback from team leads</li>
+        <li>Weekly iteration cycle</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="q">Q2</div>
+      <h4>Intelligence</h4>
+      <ul>
+        <li>Predictive shrinkage alerts</li>
+        <li>Automated daily executive digest</li>
+        <li>Mobile app for team leads</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="q">Q3</div>
+      <h4>Expansion</h4>
+      <ul>
+        <li>HR / payroll integration</li>
+        <li>Additional KPI modules (quality, TAT)</li>
+        <li>Multi-shift &amp; multi-location</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SLIDE 9 — RECOGNITION & ASK ═══════════ -->
+<section class="slide dark">
+  <div class="eyebrow">Recognition &amp; The Ask</div>
+  <h2 class="title" style="color:#fff;font-size:30px">This was a partnership — and here's what we need</h2>
+  <div class="gold-bar"></div>
+  <div class="credit-row">
+    <div class="credit-box">
+      <div class="lbl">Built &amp; Executed by</div>
+      <strong>[ Your Name ]</strong>
+    </div>
+    <div class="credit-box">
+      <div class="lbl">Strategic Inputs &amp; Validation by</div>
+      <strong>Andy</strong>
+    </div>
+  </div>
+  <div class="ask-box">
+    <ul>
+      <li>Endorsement to roll out across all projects</li>
+      <li>HR data access for next-phase FTE analytics</li>
+      <li>30 minutes with each Director's team for feedback</li>
+    </ul>
+  </div>
+  <div class="thanks">Thank You — Questions?</div>
+  <div class="contact">[ Your Name ] &nbsp;·&nbsp; [ Your Email ] &nbsp;·&nbsp; [ Your Role ]</div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total  = slides.length;
+  let idx = 0;
+
+  function fit(){
+    const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * 0.94;
+    document.documentElement.style.setProperty('--scale', s);
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  function show(n){
+    idx = Math.max(0, Math.min(total - 1, n));
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    document.getElementById('counter').textContent = (idx + 1) + ' / ' + total;
+    document.getElementById('progressFill').style.width = ((idx + 1) / total * 100) + '%';
+    if (location.hash !== '#' + (idx + 1)) history.replaceState(null, '', '#' + (idx + 1));
+  }
+
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', ' ', 'PageDown', 'Enter'].includes(e.key)) { e.preventDefault(); show(idx + 1); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(idx - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End')  { e.preventDefault(); show(total - 1); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+  });
+
+  // Click left / right half to navigate
+  document.getElementById('stage').addEventListener('click', e => {
+    if (e.target.closest('.slide') === null) return;
+    const rect = document.documentElement.getBoundingClientRect();
+    if (e.clientX - rect.left > rect.width / 2) show(idx + 1);
+    else show(idx - 1);
+  });
+
+  // Deep-link from URL hash
+  const start = parseInt((location.hash || '').replace('#',''), 10);
+  if (start && start >= 1 && start <= total) idx = start - 1;
+  show(idx);
+})();
+</script>
+
+</body>
+</html>
